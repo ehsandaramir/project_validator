@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<project title="A1" path="A1/A1">
+    <source path="Program.cs">
+        <namespace name="A1">
+            <class name="Program">
+                <method name="Program">
+
+                </method>
+            </class>
+        </namespace>
+    </source>
+    <source path="MyClass.cs">
+        <namespace name="Program">
+            <class name="MClass">
+                <method name="Program">
+
+                </method>
+            </class>
+        </namespace>
+    </source>
+</project>
