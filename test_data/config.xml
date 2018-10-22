@@ -1,22 +1,40 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<project title="A1" path="A1/A1">
-    <source path="Program.cs">
-        <namespace name="A1">
-            <class name="Program">
-                <method name="Program">
+<solution title="A1" path="A1">
 
-                </method>
-            </class>
-        </namespace>
-    </source>
-    <source path="MyClass.cs">
-        <namespace name="Program">
-            <class name="MClass">
-                <method name="Program">
+    <project title="A1" path="A1">
+        <source path="Program.cs">
+            <namespace name="A1">
+                <class name="Program">
+                    <method name="Main"/>
+                    <method name="Add"/>
+                    <method name="Process"/>
+                </class>
+            </namespace>
+        </source>
+        <source path="MyClass.cs">
+            <namespace name="Program">
+                <class name="MClass">
+                    <method name="Program"/>
+                </class>
+            </namespace>
+        </source>
+    </project>
 
-                </method>
-            </class>
-        </namespace>
-    </source>
-</project>
+    <project title="A1Tests" path="A1Tests">
+        <source path="ProgramTests.cs">
+            <namespace name="A1">
+                <class name="ProgramTests">
+                    <method name="AddTest"/>
+                </class>
+            </namespace>
+        </source>
+        <source path="MyClass.cs">
+            <namespace name="Program">
+                <class name="MClass">
+                    <method name="Program"/>
+                </class>
+            </namespace>
+        </source>
+    </project>
+</solution>

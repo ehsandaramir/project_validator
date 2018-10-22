@@ -11,7 +11,7 @@ class Error:
         if self.message is None:
             return 'Error<{}::{}: {}>'.format(self.category, self.sub_category, self.source)
         else:
-            return 'Error<{}::{}: {}\n\tmessage: {}>'.format(self.category, self.sub_category, self.source, self.message)
+            return 'Error<{}::{}: {}  message: {}>'.format(self.category, self.sub_category, self.source, self.message)
 
     def __repr__(self):
         return self.__str__()

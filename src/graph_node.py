@@ -60,4 +60,7 @@ class GraphNode:
             self.name = tokens[0].split('(')[0]
 
     def __repr__(self):
-        return '{}({}) children: {}'.format(self.cat, self.name, self.children)
+        if len(self.children) > 0:
+            return '{}({}) children: {}'.format(self.cat, self.name, self.children)
+        else:
+            return '{}({})'.format(self.cat, self.name)

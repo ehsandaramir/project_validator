@@ -7,6 +7,7 @@ namespace A1
     {
         static void Main(string[] args)
         {
+            Console.WriteLine("test");
         }
 
         public static int Add(int a, int b)
