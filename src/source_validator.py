@@ -1,7 +1,7 @@
 from os import path
-from src.error import Error
-from src.graph_parser import GraphParser
-from src.graph_validator import GraphValidator
+from src.report.error import Error
+from src.graph.graph_parser import GraphParser
+from src.graph.graph_validator import GraphValidator
 
 
 class SourceValidator:

@@ -1,6 +1,6 @@
 import filecmp, os
 from os import path
-from error import Error
+from src.report.error import Error
 
 
 class StaticChecker:

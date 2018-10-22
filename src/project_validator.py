@@ -1,4 +1,4 @@
-from src.error import Error
+from src.report.error import Error
 import os.path as path
 
 from src.source_validator import SourceValidator

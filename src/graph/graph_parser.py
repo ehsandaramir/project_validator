@@ -1,4 +1,4 @@
-from src.graph_node import GraphNode
+from src.graph.graph_node import GraphNode
 
 
 class GraphParser:

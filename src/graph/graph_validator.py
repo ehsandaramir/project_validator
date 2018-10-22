@@ -1,5 +1,5 @@
-from src.error import Error
-from src.graph_node import GraphNode
+from src.report.error import Error
+from src.graph.graph_node import GraphNode
 from src.validator.validator_factory import ValidatorFactory
 
 

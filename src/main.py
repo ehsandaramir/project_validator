@@ -2,6 +2,7 @@ from pprint import pprint
 from os import path
 
 from src.dynamic_validator import DynamicValidator
+from src.report.report_generator import ReportGenerator
 from src.static_validator import StaticChecker
 
 
@@ -21,3 +22,6 @@ if __name__ == '__main__':
     pprint(sc_result)
     print('\ndynamic validations:')
     pprint(dv_result)
+
+    reports = sc_result + dv_result
+    report_generator = ReportGenerator(reports, '../report.pdf', name='95411018', status='failed', grade=83.4)
