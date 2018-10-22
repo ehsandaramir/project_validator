@@ -17,14 +17,14 @@ class ReportGenerator:
         :param kwargs:
         :keyword name
         """
-        self.reports = errors * 2
+        self.reports = errors
         self.path = destination_path
         self.user_data = kwargs
 
         if kwargs['status'].lower() == 'succeeded':
-            self.image_path = '../success.png'
+            self.image_path = '../res/success.png'
         if kwargs['status'].lower() == 'failed':
-            self.image_path = '../fail.png'
+            self.image_path = '../res/fail.png'
 
         self.pdf = FPDF('L', 'cm')
 
