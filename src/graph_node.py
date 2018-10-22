@@ -1,21 +1,24 @@
 
 
 class GraphNode:
-    reserved = ['namespace', 'class']
-    modifiers = ['public', 'private', 'protected', 'static']
-    primitives = ['int', 'long', 'string', 'void']
+    all_reserved = ['namespace', 'class']
+    all_modifiers = ['public', 'private', 'protected', 'static']
+    all_primitives = ['int', 'long', 'string', 'void']
 
-    def __init__(self, parent, signature: str):
+    def __init__(self, parent, signature: str, annotations=[]):
         self.cat = None
         self.children = []
         self.content = ['{']
+        self.modifiers = []
 
         self.parent = parent
         self.signature = signature
         self.name = ''
+        self.annotations = annotations
 
         self._evaluate_category()
-        self.evaluate_name()
+        self._evaluate_name()
+        self._evaluate_modifiers()
 
     def add_to_content(self, line):
         tmp = self
@@ -45,19 +48,31 @@ class GraphNode:
             if self.parent.cat == 'in-method':
                 self.cat = 'in-method'
 
-    def evaluate_name(self):
+    def _evaluate_name(self):
         if self.cat == 'namespace':
             self.name = self.signature.split(' ')[1]
 
         if self.cat == 'class':
-            tokens = [tok for tok in self.signature.split(' ')
-                      if (tok not in self.modifiers) and (tok not in self.reserved)]
+            tokens = [tok
+                      for tok in self.signature.split(' ')
+                      if (tok not in self.all_modifiers)
+                      and (tok not in self.all_reserved)
+                      ]
             self.name = tokens[0]
 
         if self.cat == 'method':
-            tokens = [tok for tok in self.signature.split(' ')
-                      if (tok not in self.modifiers) and (tok not in self.primitives) and (tok not in self.reserved)]
+            tokens = [tok
+                      for tok in self.signature.split(' ')
+                      if (tok not in self.all_modifiers)
+                      and (tok not in self.all_primitives)
+                      and (tok not in self.all_reserved)
+                      ]
             self.name = tokens[0].split('(')[0]
+
+    def _evaluate_modifiers(self):
+        for mod in GraphNode.all_modifiers:
+            if self.signature.find(mod) >= 0:
+                self.modifiers.append(mod)
 
     def __repr__(self):
         if len(self.children) > 0:

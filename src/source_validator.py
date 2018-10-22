@@ -1,6 +1,4 @@
 from os import path
-from pprint import pprint
-
 from src.error import Error
 from src.graph_parser import GraphParser
 from src.graph_validator import GraphValidator

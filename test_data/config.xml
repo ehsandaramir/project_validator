@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<solution title="A1" path="A1">
+<solution name="A1" path="A1">
 
-    <project title="A1" path="A1">
+    <project name="A1" path="A1">
         <source path="Program.cs">
             <namespace name="A1">
                 <class name="Program">
@@ -21,11 +21,15 @@
         </source>
     </project>
 
-    <project title="A1Tests" path="A1Tests">
+    <project name="A1Tests" path="A1Tests">
         <source path="ProgramTests.cs">
             <namespace name="A1">
                 <class name="ProgramTests">
-                    <method name="AddTest"/>
+                    <method name="AddTest"
+                            annotation-contains="TestMethod"/>
+                    <method name="GradedTest"
+                            annotation-contains="TestMethod;Timeout(100)"
+                            body-contains="RunLocalTests"/>
                 </class>
             </namespace>
         </source>
@@ -37,4 +41,5 @@
             </namespace>
         </source>
     </project>
+
 </solution>

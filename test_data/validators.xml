@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<validators>
+
+    <validator name="AnnotationValidator" attribute="annotation-contains" category="annotations">
+        <rule value="TestMethod" act="ignore" priority="warning"/>
+    </validator>
+
+    <validator name="BodyValidator" attribute="body-contains" category="method-body">
+        <rule value="TestMethod" act="ignore" priority="warning"/>
+    </validator>
+
+</validators>

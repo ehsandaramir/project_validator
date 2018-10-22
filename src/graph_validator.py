@@ -1,7 +1,6 @@
-from pprint import pprint
-
 from src.error import Error
 from src.graph_node import GraphNode
+from src.validator.validator_factory import ValidatorFactory
 
 
 class GraphValidator:
@@ -14,7 +13,18 @@ class GraphValidator:
 
     def _validate_node_attributes(self, node: GraphNode, attributes: dict) -> bool:
         print(attributes)
-        return True
+        all_passed = True
+
+        for attribute in attributes:
+            if ValidatorFactory.has_validator(attribute):
+                status, errors = ValidatorFactory\
+                    .get_validator_by_attr(attribute)\
+                    .validate(node, self.source_path, attributes)
+                self.report += errors
+                if not status:
+                    all_passed = False
+
+        return all_passed
 
     def _validate_node_existence(self, node: GraphNode, config):
         print('matching node {}\n\tto config {}: {}'.format(node, config.tag, config.attrib))
@@ -37,11 +47,11 @@ class GraphValidator:
                     'dynamic',
                     conf.tag,
                     self.source_path,
-                    '{} not found `{}`'.format(conf.tag, conf.attrib['name'])))
+                    '{} not found `{}`'.format(conf.tag, conf.attrib['name'])
+                ))
 
     def validate(self):
         try:
             self._validate_node_existence(self.root, self.config)
         except AttributeError as exc:
-            print('*** an error occurs during validating ***')
-        pprint(self.report)
+            print('*** an error occurred during validation ***')
