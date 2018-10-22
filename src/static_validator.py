@@ -3,7 +3,7 @@ from os import path
 from src.report.error import Error
 
 
-class StaticChecker:
+class StaticValidator:
 
     def __init__(self, touchstone_root: str, test_root: str):
         self.touchstone = touchstone_root
@@ -27,11 +27,11 @@ class StaticChecker:
 
         for di in list_dirs:
             if path.exists(path.join(test, di)):
-                StaticChecker._eval(rep, path.join(tstone, di), path.join(test, di))
+                StaticValidator._eval(rep, path.join(tstone, di), path.join(test, di))
             else:
                 rep.append(Error('static', 'existence', path.join(test, di)))
 
-    def evaluate(self) -> list:
+    def validate(self) -> list:
         report = []
         self._eval(report, self.touchstone, self.test)
         return report

@@ -1,4 +1,5 @@
 from fpdf import FPDF
+from datetime import datetime
 from os import path
 from src.report.error import Error
 
@@ -16,6 +17,8 @@ class ReportGenerator:
         :param destination_path: path of report, including file name
         :param kwargs:
         :keyword name
+        :keyword status
+        :keyword grade
         """
         self.reports = errors
         self.path = destination_path
@@ -61,8 +64,8 @@ class ReportGenerator:
         self.pdf.add_page()
 
     def _write_page_head(self):
-        heading = 'Student id: {},  status: {},  grade: {}'\
-            .format(self.user_data['name'], self.user_data['status'], self.user_data['grade'])
+        heading = 'Student id: {},    status: {},    grade: {},    time: {}'\
+            .format(self.user_data['name'], self.user_data['status'], self.user_data['grade'], datetime.utcnow())
         self.pdf.image(self.image_path, 1, 1, w=2, h=2)
 
         self.pdf.set_font("Arial", 'B', size=20)
