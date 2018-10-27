@@ -10,12 +10,12 @@ from src.static_validator import StaticValidator
 
 class BundledValidator:
 
-    def __init__(self, student_id, file_name):
+    def __init__(self, student_id, file_name, zipped=True):
+        self._zipped = zipped
         self._target_path = '../test_data'
         self._resource_path = '../res'
         self._student_id = student_id
         self._file_name = file_name
-        self._file_name_main = file_name.split('.')[0]
         self._report_path = os.path.join(self._target_path,
                                          'results/report_{}_{}.pdf'
                                          .format(self._student_id, time.time().__str__().split('.')[0]))
@@ -24,7 +24,13 @@ class BundledValidator:
         except FileExistsError:
             pass
 
-        self._extract_target()
+        if self._zipped:
+            self._file_name_main = file_name.split('.')[0]
+            self._extract_target()
+        else:
+            self._file_name_main = file_name
+            self._target_path = os.path.join(self._target_path, self._file_name)
+
         self._init_validators()
         self._validate()
 
@@ -43,8 +49,7 @@ class BundledValidator:
             pass
 
     def _init_validators(self):
-        self._static_validator = StaticValidator(os.path.join(self._resource_path, 'touchstone'),
-                                                 os.path.join(self._target_path, self._student_id))
+        self._static_validator = StaticValidator(os.path.join(self._resource_path, 'touchstone'), self._target_path)
 
         self._dynamic_validator = DynamicValidator(os.path.join(self._resource_path, 'config.xml'),
                                                    os.path.join(self._resource_path, 'validators.xml'),
