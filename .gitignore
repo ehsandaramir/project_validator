@@ -2,7 +2,9 @@
 
 .idea/
 .directory
-
+test_data/
+*.tgz
+*.pdf
 
 
 # Byte-compiled / optimized / DLL files
