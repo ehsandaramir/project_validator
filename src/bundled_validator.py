@@ -49,11 +49,11 @@ class BundledValidator:
             pass
 
     def _init_validators(self):
-        self._static_validator = StaticValidator(os.path.join(self._resource_path, 'touchstone'), self._target_path)
+        self._static_validator = StaticValidator(os.path.join(self._resource_path, 'touchstone'), self._target_path, verbose=True, fail_only=True)
 
         self._dynamic_validator = DynamicValidator(os.path.join(self._resource_path, 'config.xml'),
                                                    os.path.join(self._resource_path, 'validators.xml'),
-                                                   os.path.join(self._target_path, self._student_id))
+                                                   self._target_path)
 
     def _validate(self):
         static_report = self._static_validator.validate()
