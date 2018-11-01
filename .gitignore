@@ -5,6 +5,7 @@
 test_data/
 *.tgz
 *.pdf
+*.zip
 
 
 # Byte-compiled / optimized / DLL files

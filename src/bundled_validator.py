@@ -13,12 +13,14 @@ class BundledValidator:
     def __init__(self, student_id, file_name, zipped=True):
         self._zipped = zipped
         self._target_path = '../test_data'
+        self._result_path = '../test_results'
         self._resource_path = '../res'
         self._student_id = student_id
         self._file_name = file_name
         self._report_path = os.path.join(self._target_path,
                                          'results/report_{}_{}.pdf'
                                          .format(self._student_id, time.time().__str__().split('.')[0]))
+        # TODO: reports in different path
         try:
             os.mkdir(os.path.join(self._target_path, 'results'))
         except FileExistsError:
@@ -49,7 +51,8 @@ class BundledValidator:
             pass
 
     def _init_validators(self):
-        self._static_validator = StaticValidator(os.path.join(self._resource_path, 'touchstone'), self._target_path, verbose=True, fail_only=True)
+        self._static_validator = StaticValidator(os.path.join(self._resource_path, 'touchstone'), self._target_path,
+                                                 verbose=True, fail_only=False)
 
         self._dynamic_validator = DynamicValidator(os.path.join(self._resource_path, 'config.xml'),
                                                    os.path.join(self._resource_path, 'validators.xml'),
