@@ -1,15 +1,15 @@
 from src.report.error import Error
 from src.graph.graph_node import GraphNode
+from src.report.report_xml import XmlReport
 from src.validator.validator_factory import ValidatorFactory
 
 
 class GraphValidator:
 
-    def __init__(self, source_root, report, config, source_path):
+    def __init__(self, source_root, config, source_path):
         self.config = config
         self.root = source_root
         self.source_path = source_path
-        self.report = report
 
     def _validate_node_attributes(self, node: GraphNode, attributes: dict) -> bool:
         print(attributes)
@@ -20,7 +20,10 @@ class GraphValidator:
                 status, errors = ValidatorFactory\
                     .get_validator_by_attr(attribute)\
                     .validate(node, self.source_path, attributes)
-                self.report += errors
+
+                for err in errors:
+                    XmlReport.add_report(err)
+
                 if not status:
                     all_passed = False
 
@@ -29,8 +32,9 @@ class GraphValidator:
     def _validate_node_existence(self, node: GraphNode, config):
         print('matching node {}\n\tto config {}: {}'.format(node, config.tag, config.attrib))
         if node.cat != config.tag:
-            self.report.append(
-                Error('dynamic', config.tag, self.source_path, '{} does not match: `{}`'.format(config.tag, node.cat)))
+            # self.report.append(
+            #     Error('dynamic', config.tag, self.source_path, '{} does not match: `{}`'.format(config.tag, node.cat)))
+            XmlReport.add_report( Error('dynamic', config.tag, self.source_path, '{} does not match: `{}`'.format(config.tag, node.cat)))
 
         self._validate_node_attributes(node, config.attrib)
 
@@ -43,7 +47,7 @@ class GraphValidator:
                     break
 
             if not child_found:
-                self.report.append(Error(
+                XmlReport.add_report(Error(
                     'dynamic',
                     conf.tag,
                     self.source_path,

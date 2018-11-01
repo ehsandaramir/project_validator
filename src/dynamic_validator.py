@@ -13,11 +13,10 @@ class DynamicValidator:
 
         target_tree = ET.parse(config_path)
         self.config = target_tree.getroot()
-        self.report = []
 
     def _validate_project(self, config, solution_path):
         print('solution path: {}'.format(solution_path))
-        project_validator = ProjectValidator(self.report, config)
+        project_validator = ProjectValidator(config)
         project_validator.validate(solution_path)
 
     def _initialize_validators(self, val_tree):
@@ -27,4 +26,3 @@ class DynamicValidator:
         if self.config.tag == 'solution':
             for prj in self.config:
                 self._validate_project(prj, path.join(self.path_target, self.config.attrib['path']))
-        return self.report

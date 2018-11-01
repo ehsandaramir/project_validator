@@ -1,30 +1,24 @@
-import time
 import zipfile
 import os
-from pprint import pprint
-
+import logging
 from src.dynamic_validator import DynamicValidator
-from src.report.report_generator import ReportGenerator
+from src.report.report_xml import XmlReport
 from src.static_validator import StaticValidator
 
 
 class BundledValidator:
 
-    def __init__(self, student_id, file_name, zipped=True):
+    def __init__(self, student_id, file_name, report_file_name, result_path, zipped=True):
+        logging.debug('creating bundled validator for %s', student_id)
         self._zipped = zipped
         self._target_path = '../test_data'
-        self._result_path = '../test_results'
+        self._result_path = result_path
         self._resource_path = '../res'
         self._student_id = student_id
         self._file_name = file_name
-        self._report_path = os.path.join(self._target_path,
-                                         'results/report_{}_{}.pdf'
-                                         .format(self._student_id, time.time().__str__().split('.')[0]))
-        # TODO: reports in different path
-        try:
-            os.mkdir(os.path.join(self._target_path, 'results'))
-        except FileExistsError:
-            pass
+        self._report_path = os.path.join(self._result_path, report_file_name)
+
+        logging.debug('input as zip: %s', zipped)
 
         if self._zipped:
             self._file_name_main = file_name.split('.')[0]
@@ -37,9 +31,13 @@ class BundledValidator:
         self._validate()
 
     def _extract_target(self):
-        zipref = zipfile.ZipFile(os.path.join(self._target_path, self._file_name), 'r')
-        zipref.extractall(os.path.join(self._target_path, self._student_id))
-        zipref.close()
+        logging.debug('extracting %s...', self._file_name)
+
+        zip_ref = zipfile.ZipFile(os.path.join(self._target_path, self._file_name), 'r')
+        zip_ref.extractall(os.path.join(self._target_path, self._student_id))
+        zip_ref.close()
+
+        logging.debug('extraction done!')
 
         if os.path.exists(os.path.join(self._target_path, self._file_name_main)):
             dirs = os.listdir(os.path.join(self._target_path, self._file_name_main))
@@ -51,24 +49,20 @@ class BundledValidator:
             pass
 
     def _init_validators(self):
-        self._static_validator = StaticValidator(os.path.join(self._resource_path, 'touchstone'), self._target_path,
-                                                 verbose=True, fail_only=False)
+        logging.debug('initializing validator: static')
 
+        self._static_validator = StaticValidator(os.path.join(self._resource_path, 'touchstone'), self._target_path)
+
+        logging.debug('initializing validator: dynamic')
         self._dynamic_validator = DynamicValidator(os.path.join(self._resource_path, 'config.xml'),
                                                    os.path.join(self._resource_path, 'validators.xml'),
                                                    self._target_path)
 
     def _validate(self):
-        static_report = self._static_validator.validate()
-        dynamic_report = self._dynamic_validator.validate()
-        self.final_report = static_report + dynamic_report
+        logging.debug('bundled validation started')
 
-        pprint(self.final_report)
+        XmlReport.add_section('A1')
+        self._static_validator.validate()
+        # self._dynamic_validator.validate()
 
-        report_generator = ReportGenerator(self.final_report,
-                                           self._report_path,
-                                           name=self._student_id,
-                                           status='failed',
-                                           grade=83.4)
-        # TODO: Delete cached files
-        # TODO: set archive as _backup
+        XmlReport.export_report(self._report_path)

@@ -2,12 +2,12 @@ from os import path
 from src.report.error import Error
 from src.graph.graph_parser import GraphParser
 from src.graph.graph_validator import GraphValidator
+from src.report.report_xml import XmlReport
 
 
 class SourceValidator:
 
-    def __init__(self, report, config, source_path):
-        self.report = report
+    def __init__(self, config, source_path):
         self.config = config
         self.source_path = source_path
 
@@ -17,7 +17,8 @@ class SourceValidator:
             content = hnd.readlines()
             return content
         else:
-            self.report.append(Error('dynamic', 'source', self.source_path, 'file does not exist'))
+            # self.report.append(Error('dynamic', 'source', self.source_path, 'file does not exist'))
+            XmlReport.add_report(Error('dynamic', 'source', self.source_path, 'file does not exist'))
             raise FileNotFoundError('source not found')
 
     @staticmethod
@@ -37,7 +38,7 @@ class SourceValidator:
             graph_parser = GraphParser(source)
             graph_parser.parse()
 
-            graph_validator = GraphValidator(graph_parser.root, self.report, config, self.source_path)
+            graph_validator = GraphValidator(graph_parser.root, config, self.source_path)
             graph_validator.validate()
 
         except FileNotFoundError:
@@ -46,4 +47,3 @@ class SourceValidator:
     def validate(self):
         for child in self.config:
             self._validate_namespace(child)
-        return self.report

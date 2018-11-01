@@ -1,18 +1,18 @@
 from src.report.error import Error
 import os.path as path
 
+from src.report.report_xml import XmlReport
 from src.source_validator import SourceValidator
 
 
 class ProjectValidator:
 
-    def __init__(self, report, config):
-        self.report = report
+    def __init__(self, config):
         self.config = config
 
     def _validate_source(self, config, path_target):
         print('validating source {}'.format(config.attrib['path']))
-        source_validator = SourceValidator(self.report, config, path.join(path_target, config.attrib['path']))
+        source_validator = SourceValidator(config, path.join(path_target, config.attrib['path']))
         source_validator.validate()
 
     def validate(self, path_target):
@@ -23,6 +23,5 @@ class ProjectValidator:
             for source in self.config:
                 self._validate_source(source, path_target)
         else:
-            self.report.append(Error('dynamic', 'project', path_target, 'project does not exist'))
-
-        return self.report
+            # self.report.append(Error('dynamic', 'project', path_target, 'project does not exist'))
+            XmlReport.add_report(Error('dynamic', 'project', path_target, 'project does not exist'))
