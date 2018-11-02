@@ -1,7 +1,9 @@
+import logging
 from os import path
 import xml.etree.ElementTree as ET
 
 from src.project_validator import ProjectValidator
+from src.report.report_xml import XmlReport
 from src.validator.validator_factory import ValidatorFactory
 
 
@@ -15,7 +17,7 @@ class DynamicValidator:
         self.config = target_tree.getroot()
 
     def _validate_project(self, config, solution_path):
-        print('solution path: {}'.format(solution_path))
+        logging.info('solution path: {}'.format(solution_path))
         project_validator = ProjectValidator(config)
         project_validator.validate(solution_path)
 
@@ -23,6 +25,13 @@ class DynamicValidator:
         pass
 
     def validate(self):
+        logging.debug('dynamic validation started')
+
         if self.config.tag == 'solution':
             for prj in self.config:
+                logging.debug('validating project %s started', prj.attrib['name'])
+                XmlReport.add_section(prj.attrib['name'])
                 self._validate_project(prj, path.join(self.path_target, self.config.attrib['path']))
+                logging.debug('validating project %s finished', prj.attrib['name'])
+
+        logging.debug('dynamic validation finished')

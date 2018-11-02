@@ -61,8 +61,10 @@ class BundledValidator:
     def _validate(self):
         logging.debug('bundled validation started')
 
-        XmlReport.add_section('A1')
+        XmlReport.add_section('static')
         self._static_validator.validate()
-        # self._dynamic_validator.validate()
+
+        # section added internally
+        self._dynamic_validator.validate()
 
         XmlReport.export_report(self._report_path)
