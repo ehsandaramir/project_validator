@@ -1,6 +1,6 @@
 import os
 import time
-from src.bundled_validator import BundledValidator
+from .solution_validator.bundled_validator import BundledValidator
 import logging.config
 
 

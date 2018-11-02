@@ -3,8 +3,8 @@ import os
 import difflib
 from os import path
 
-from src.report.error import Error
-from src.report.report_xml import XmlReport
+from solution_validator.report.error import Error
+from solution_validator.report.report_xml import XmlReport
 
 
 class StaticValidator:

@@ -1,8 +1,8 @@
-from src.report.error import Error
+from solution_validator.report.error import Error
 import os.path as path
 import logging
-from src.report.report_xml import XmlReport
-from src.source_validator import SourceValidator
+from solution_validator.report.report_xml import XmlReport
+from solution_validator.gen_validators.source_validator import SourceValidator
 
 
 class ProjectValidator:

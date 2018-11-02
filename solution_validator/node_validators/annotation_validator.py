@@ -1,16 +1,16 @@
-from src.report.error import Error
-from src.graph.graph_node import GraphNode
-from src.validator.annotation_validator import BaseValidator
+from solution_validator.report.error import Error
+from solution_validator.graph.graph_node import GraphNode
+from solution_validator.node_validators.base_validator import BaseValidator
 
 
-class BodyValidator(BaseValidator):
+class AnnotationValidator(BaseValidator):
 
-    def _validate(self, node: GraphNode, source: str, terms, errors) -> bool:
+    def _validate(self, node: GraphNode, source: str, terms, errors):
         all_found = True
         for term in terms:
             found = False
-            for line in node.content:
-                if line.find(term) >= 0:
+            for ann in node.annotations:
+                if ann.find(term) >= 0:
                     found = True
                     break
             if not found:

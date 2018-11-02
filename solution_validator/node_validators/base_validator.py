@@ -1,4 +1,4 @@
-from src.graph.graph_node import GraphNode
+from solution_validator.graph.graph_node import GraphNode
 
 
 class BaseValidator:

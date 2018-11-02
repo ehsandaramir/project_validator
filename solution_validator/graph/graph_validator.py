@@ -1,7 +1,7 @@
-from src.report.error import Error
-from src.graph.graph_node import GraphNode
-from src.report.report_xml import XmlReport
-from src.validator.validator_factory import ValidatorFactory
+from solution_validator.report.error import Error
+from solution_validator.graph.graph_node import GraphNode
+from solution_validator.report.report_xml import XmlReport
+from solution_validator.node_validators.validator_factory import ValidatorFactory
 
 
 class GraphValidator:

@@ -1,6 +1,6 @@
 import xml.etree.ElementTree as ElementTree
-from src.validator.annotation_validator import AnnotationValidator
-from src.validator.body_validator import BodyValidator
+from solution_validator.node_validators.annotation_validator import AnnotationValidator
+from solution_validator.node_validators.body_validator import BodyValidator
 
 
 class ValidatorFactory:
@@ -22,7 +22,7 @@ class ValidatorFactory:
                 attr = validator.attrib['attribute']
                 ValidatorFactory._validators[attr] = ValidatorFactory._validator_mapper[attr](validator)
             except KeyError:
-                raise ResourceWarning('used a validator that its class does not exist! (validators.xml)')
+                raise ResourceWarning('used a node_validators that its class does not exist! (validators.xml)')
 
     @staticmethod
     def get_validator_by_attr(name: str) -> AnnotationValidator:

@@ -1,15 +1,15 @@
 import zipfile
 import os
 import logging
-from src.dynamic_validator import DynamicValidator
-from src.report.report_xml import XmlReport
-from src.static_validator import StaticValidator
+from solution_validator.gen_validators.dynamic_validator import DynamicValidator
+from solution_validator.report.report_xml import XmlReport
+from solution_validator.gen_validators.static_validator import StaticValidator
 
 
 class BundledValidator:
 
     def __init__(self, student_id, file_name, report_file_name, result_path, zipped=True):
-        logging.debug('creating bundled validator for %s', student_id)
+        logging.debug('creating bundled node_validators for %s', student_id)
         self._zipped = zipped
         self._target_path = '../test_data'
         self._result_path = result_path
@@ -49,11 +49,11 @@ class BundledValidator:
             pass
 
     def _init_validators(self):
-        logging.debug('initializing validator: static')
+        logging.debug('initializing node_validators: static')
 
         self._static_validator = StaticValidator(os.path.join(self._resource_path, 'touchstone'), self._target_path)
 
-        logging.debug('initializing validator: dynamic')
+        logging.debug('initializing node_validators: dynamic')
         self._dynamic_validator = DynamicValidator(os.path.join(self._resource_path, 'config.xml'),
                                                    os.path.join(self._resource_path, 'validators.xml'),
                                                    self._target_path)

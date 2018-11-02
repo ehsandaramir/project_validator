@@ -2,9 +2,9 @@ import logging
 from os import path
 import xml.etree.ElementTree as ET
 
-from src.project_validator import ProjectValidator
-from src.report.report_xml import XmlReport
-from src.validator.validator_factory import ValidatorFactory
+from solution_validator.gen_validators.project_validator import ProjectValidator
+from solution_validator.report.report_xml import XmlReport
+from solution_validator.node_validators.validator_factory import ValidatorFactory
 
 
 class DynamicValidator:

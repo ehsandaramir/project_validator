@@ -1,4 +1,4 @@
-from src.report.error import Error
+from solution_validator.report.error import Error
 import logging
 
 
