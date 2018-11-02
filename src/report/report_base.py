@@ -1,4 +1,5 @@
 from src.report.error import Error
+import logging
 
 
 class BaseReport:
@@ -7,11 +8,13 @@ class BaseReport:
 
     @staticmethod
     def add_section(title: str):
+        logging.debug('adding report section: %s', title)
         BaseReport.reports[title] = []
         BaseReport.recently_added_section = title
 
     @staticmethod
     def add_report(err: Error, section: str = None):
+        logging.debug('adding report item: %s', err.__str__())
         if section:
             if BaseReport.recently_added_section:
                 BaseReport.reports[section].append(err)
@@ -30,5 +33,6 @@ class BaseReport:
 
     @staticmethod
     def clear_report():
+        logging.debug('clear error accumulator')
         BaseReport.reports = {}
         BaseReport.recently_added_section = None

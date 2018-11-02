@@ -4,7 +4,7 @@ from os import path
 from src.report.error import Error
 
 
-class ReportGenerator:
+class PdfReport:
 
     line_top_offset = 4
     line_left_offset = 1

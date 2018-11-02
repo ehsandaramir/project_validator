@@ -1,3 +1,4 @@
+import logging
 
 
 class GraphNode:
@@ -5,7 +6,10 @@ class GraphNode:
     all_modifiers = ['public', 'private', 'protected', 'static']
     all_primitives = ['int', 'long', 'string', 'void']
 
-    def __init__(self, parent, signature: str, annotations=[]):
+    def __init__(self, parent, signature: str, annotations=None):
+        logging.debug('initializing node: %s', signature)
+        logging.debug('initializing node: %s', annotations.__str__())
+
         self.cat = None
         self.children = []
         self.content = ['{']
@@ -14,7 +18,7 @@ class GraphNode:
         self.parent = parent
         self.signature = signature
         self.name = ''
-        self.annotations = annotations
+        self.annotations = annotations if annotations is not None else list()
 
         self._evaluate_category()
         self._evaluate_name()
@@ -25,8 +29,11 @@ class GraphNode:
         while tmp is not None:
             tmp.content.append(line)
             tmp = tmp.parent
+            # TODO: reformat to recursive
 
     def _evaluate_category(self):
+        logging.debug('detecting category...')
+
         if self.parent is None:
             self.cat = 'namespace'
         else:
@@ -48,7 +55,11 @@ class GraphNode:
             if self.parent.cat == 'in-method':
                 self.cat = 'in-method'
 
+            logging.info('detected category: %s', self.cat)
+
     def _evaluate_name(self):
+        logging.debug('evaluating node name...')
+
         if self.cat == 'namespace':
             self.name = self.signature.split(' ')[1]
 
@@ -69,10 +80,16 @@ class GraphNode:
                       ]
             self.name = tokens[0].split('(')[0]
 
+        logging.info('node name: %s', self.name)
+
     def _evaluate_modifiers(self):
+        logging.debug('evaluating modifiers...')
+
         for mod in GraphNode.all_modifiers:
             if self.signature.find(mod) >= 0:
                 self.modifiers.append(mod)
+
+        logging.info('evaluated modifiers: %s', self.modifiers.__str__())
 
     def __repr__(self):
         if len(self.children) > 0:
