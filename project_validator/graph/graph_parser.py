@@ -1,5 +1,5 @@
-from solution_validator.graph.graph_node import GraphNode
 import logging
+from ..graph.graph_node import GraphNode
 
 
 class GraphParser:

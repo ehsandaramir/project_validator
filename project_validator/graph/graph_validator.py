@@ -1,7 +1,9 @@
-from solution_validator.report.error import Error
-from solution_validator.graph.graph_node import GraphNode
-from solution_validator.report.report_xml import XmlReport
-from solution_validator.node_validators.validator_factory import ValidatorFactory
+import logging
+
+from ..report.error import Error
+from ..graph.graph_node import GraphNode
+from ..report.report_xml import XmlReport
+from ..node_validators.validator_factory import ValidatorFactory
 
 
 class GraphValidator:
@@ -12,7 +14,7 @@ class GraphValidator:
         self.source_path = source_path
 
     def _validate_node_attributes(self, node: GraphNode, attributes: dict) -> bool:
-        print(attributes)
+        logging.debug(attributes)
         all_passed = True
 
         for attribute in attributes:
@@ -30,11 +32,12 @@ class GraphValidator:
         return all_passed
 
     def _validate_node_existence(self, node: GraphNode, config):
-        print('matching node {}\n\tto config {}: {}'.format(node, config.tag, config.attrib))
+        logging.info('matching node {}\n\tto config {}: {}'.format(node, config.tag, config.attrib))
+
         if node.cat != config.tag:
-            # self.report.append(
-            #     Error('dynamic', config.tag, self.source_path, '{} does not match: `{}`'.format(config.tag, node.cat)))
-            XmlReport.add_report( Error('dynamic', config.tag, self.source_path, '{} does not match: `{}`'.format(config.tag, node.cat)))
+            logging.info('{} does not match: `{}`'.format(config.tag, node.cat))
+            XmlReport.add_report(
+                Error('dynamic', config.tag, self.source_path, '{} does not match: `{}`'.format(config.tag, node.cat)))
 
         self._validate_node_attributes(node, config.attrib)
 
@@ -57,5 +60,7 @@ class GraphValidator:
     def validate(self):
         try:
             self._validate_node_existence(self.root, self.config)
-        except AttributeError as exc:
+        except AttributeError as ext:
             print('*** an error occurred during validation ***')
+            logging.error('*** an error occurred during validation ***')
+            logging.error(ext)

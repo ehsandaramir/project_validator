@@ -1,17 +1,78 @@
 import os
+import shutil
 import time
-from .solution_validator.bundled_validator import BundledValidator
+import argparse
 import logging.config
+import zipfile
+
+from .project_validator.bundled_validator import BundledValidator
+from .project_validator.report.report_xml import XmlReport
+
+
+def make_input_path(path: str) -> tuple:
+    student = os.path.splitext(path)[0]
+
+    if os.path.splitext(path)[1] == '.zip':
+        if not os.path.isfile(path):
+            raise FileNotFoundError('zip file does not exist: {}'.format(path))
+
+        if os.path.isdir(os.path.splitext(path)[0]):
+            shutil.rmtree(os.path.splitext(path)[0])
+
+        zip_ref = zipfile.ZipFile(path, 'r')
+        zip_ref.extractall(os.path.splitext(path)[0])
+        zip_ref.close()
+
+        path = os.path.splitext(path)[0]
+
+    if not os.path.isdir(path):
+        raise NotADirectoryError('input path is not a directory')
+
+    while len(os.listdir(path)) <= 1:
+        if len(os.listdir(path)) == 0:
+            raise NotADirectoryError('empty directory')
+        else:
+            path = os.path.join(path, os.listdir(path)[0])
+
+    return student, path
+
+
+def parse_arguments():
+    parser = argparse.ArgumentParser(description='Solution validator for repositories')
+
+    parser.add_argument('input_dir', metavar='Input', type=str,
+                        help='directory that contains whole repo')
+    parser.add_argument('--output-dir', dest='output_dir', metavar='Output', type=str,
+                        help='directory that will contain report and probably logs; default is time generated')
+    parser.add_argument('--student-id', dest='student_id', metavar='ID', type=str,
+                        help='Optional student id, default is input file/directory name')
+    parser.add_argument('--config', dest='config', metavar='Configurations', type=str,
+                        help='Optional path to config file, default is config.xml')
+    parser.add_argument('--validators', dest='validators', metavar='Validators', type=str,
+                        help='Optional path to validators file, default is validators.xml')
+    parser.add_argument('--touchstone', dest='touch', metavar='Touch Stone', type=str,
+                        help='Optional path to touchstone directory, default is touchstone/')
+    parser.add_argument('--export-logs', dest='export_logs', action='store_true',
+                        help='export verbose logs to output directory')
+
+    return parser.parse_args()
 
 
 if __name__ == '__main__':
-    student_id = '95411018'
-    file_name = '95411018/DS97981/'
-    result_path = '../test_results'
+
+    args = parse_arguments()
+
+    student_id = args.student_id
+    student_id, input_dir = make_input_path(args.input_dir)
 
     time_extension = time.time().__str__().split('.')[0]
+    result_path = args.output_dir if args.output_dir else 'results_{}_{}'.format(student_id, time_extension)
     log_file_name = os.path.join(result_path, 'log_{}_{}.log'.format(student_id, time_extension))
-    report_file_name = 'report_{}_{}.xml'.format(student_id, time_extension)
+    report_file_name = os.path.join(result_path, 'report_{}_{}.xml'.format(student_id, time_extension))
+
+    config_file_name = args.config if args.config else 'config.xml'
+    validators_file_name = args.validators if args.validators else 'validators.xml'
+    touchstone_dir = args.touch if args.touch else 'touchstone/'
 
     try:
         os.mkdir(result_path)
@@ -24,4 +85,19 @@ if __name__ == '__main__':
                             datefmt='%H:%M:%S',
                             level=logging.DEBUG)
 
-    bundled_validator = BundledValidator(student_id, file_name, report_file_name, result_path, False)
+    info = {
+        'student_id': student_id,
+        'input': input_dir,
+        'config': config_file_name,
+        'validators': validators_file_name,
+        'touchstone': touchstone_dir,
+        'log': log_file_name,
+        'report': report_file_name
+    }
+
+    bundled = BundledValidator(info)
+
+    if not args.export_logs:
+        os.remove(log_file_name)
+
+    print('results exported to directory {}... {} errors reported'.format(result_path, XmlReport.report_counter))

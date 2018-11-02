@@ -1,7 +1,8 @@
 import xml.etree.cElementTree as ElementTree
 from xml.dom import minidom
 import logging
-from solution_validator.report.report_base import BaseReport
+
+from ..report.report_base import BaseReport
 
 
 class XmlReport(BaseReport):

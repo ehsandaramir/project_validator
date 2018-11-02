@@ -1,7 +1,8 @@
 from fpdf import FPDF
 from datetime import datetime
 from os import path
-from solution_validator.report.error import Error
+
+from ..report.error import Error
 
 
 class PdfReport:

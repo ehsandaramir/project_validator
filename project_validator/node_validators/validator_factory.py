@@ -1,6 +1,7 @@
 import xml.etree.ElementTree as ElementTree
-from solution_validator.node_validators.annotation_validator import AnnotationValidator
-from solution_validator.node_validators.body_validator import BodyValidator
+
+from ..node_validators.annotation_validator import AnnotationValidator
+from ..node_validators.body_validator import BodyValidator
 
 
 class ValidatorFactory:

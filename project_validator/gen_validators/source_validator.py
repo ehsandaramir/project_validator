@@ -1,9 +1,9 @@
 from os import path
 import logging
-from solution_validator.report.error import Error
-from solution_validator.graph.graph_parser import GraphParser
-from solution_validator.graph.graph_validator import GraphValidator
-from solution_validator.report.report_xml import XmlReport
+from ..report.error import Error
+from ..graph.graph_parser import GraphParser
+from ..graph.graph_validator import GraphValidator
+from ..report.report_xml import XmlReport
 
 
 class SourceValidator:

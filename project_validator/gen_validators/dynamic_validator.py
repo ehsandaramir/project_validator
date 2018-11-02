@@ -1,10 +1,10 @@
 import logging
 from os import path
-import xml.etree.ElementTree as ET
+import xml.etree.ElementTree as ElementTree
 
-from solution_validator.gen_validators.project_validator import ProjectValidator
-from solution_validator.report.report_xml import XmlReport
-from solution_validator.node_validators.validator_factory import ValidatorFactory
+from ..gen_validators.project_validator import ProjectValidator
+from ..report.report_xml import XmlReport
+from ..node_validators.validator_factory import ValidatorFactory
 
 
 class DynamicValidator:
@@ -13,7 +13,7 @@ class DynamicValidator:
         self.path_target = path_target
         ValidatorFactory.load_validators(validators_path)
 
-        target_tree = ET.parse(config_path)
+        target_tree = ElementTree.parse(config_path)
         self.config = target_tree.getroot()
 
     def _validate_project(self, config, solution_path):

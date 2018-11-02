@@ -1,10 +1,12 @@
-from solution_validator.report.error import Error
 import logging
+
+from ..report.error import Error
 
 
 class BaseReport:
     reports = {}
     recently_added_section: str = None
+    report_counter = 0
 
     @staticmethod
     def add_section(title: str):
@@ -18,9 +20,11 @@ class BaseReport:
         if section:
             if BaseReport.recently_added_section:
                 BaseReport.reports[section].append(err)
+                BaseReport.report_counter += 1
             else:
                 BaseReport.add_section(section)
                 BaseReport.reports[section].append(err)
+                BaseReport.report_counter += 1
         else:
             if BaseReport.recently_added_section:
                 BaseReport.reports[BaseReport.recently_added_section].append(err)
@@ -36,3 +40,4 @@ class BaseReport:
         logging.debug('clear error accumulator')
         BaseReport.reports = {}
         BaseReport.recently_added_section = None
+        BaseReport.report_counter = 0
