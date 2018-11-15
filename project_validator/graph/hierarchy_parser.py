@@ -15,7 +15,7 @@ class HierarchyParser:
 
         for csproj in self._tree.csproj_nodes:
             csproj_content = []
-            for source in csproj.parent.children:
+            for source in csproj.children:
                 if source.cat == 'source':
                     csproj_content += self._get_source(source.path)
 
