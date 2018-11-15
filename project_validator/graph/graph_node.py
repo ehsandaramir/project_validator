@@ -35,10 +35,14 @@ class GraphNode:
         logging.debug('detecting category...')
 
         if self.parent is None:
-            self.cat = 'namespace'
+            self.cat = 'csproj'
         else:
+            if self.parent.cat == 'csproj':
+                self.cat = 'namespace'
+
             if self.parent.cat == 'namespace':
                 self.cat = 'class'
+
             if self.parent.cat == 'class':
                 if self.signature.find('(') >= 0:
                     self.cat = 'method'
@@ -59,6 +63,9 @@ class GraphNode:
 
     def _evaluate_name(self):
         logging.debug('evaluating node name...')
+
+        if self.cat == 'csproj':
+            self.name = 'csproj'
 
         if self.cat == 'namespace':
             self.name = self.signature.split(' ')[1]
@@ -92,7 +99,4 @@ class GraphNode:
         logging.info('evaluated modifiers: %s', self.modifiers.__str__())
 
     def __repr__(self):
-        if len(self.children) > 0:
-            return '{}({}) children: {}'.format(self.cat, self.name, self.children)
-        else:
-            return '{}({})'.format(self.cat, self.name)
+        return '{}({})'.format(self.cat, self.name)

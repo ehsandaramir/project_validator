@@ -108,9 +108,10 @@ if __name__ == '__main__':
     }
 
     hp = HierarchyParser(input_dir)
+    print(hp.lookup_by_name(r'^A3Tests$'))
     print('')
 
-    bundled = BundledValidator(info)
+    # bundled = BundledValidator(info)
 
     if not args.export_logs:
         os.remove(log_file_name)
