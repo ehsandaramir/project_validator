@@ -1,9 +1,10 @@
 import os
+from typing import Union
 
 
 class HierarchyNode:
 
-    csproj_nodes = []
+    project_nodes = []
 
     def __init__(self, parent, path: str, make_children: bool=True):
         self.parent = parent
@@ -31,8 +32,7 @@ class HierarchyNode:
                     self.cat = 'source'
                 elif self.ext == 'csproj':
                     self.cat = 'csproj'
-                    self.parent.cat = 'csproj'
-                    HierarchyNode.csproj_nodes.append(self.parent)
+                    self.parent.cat = 'project'
                 elif self.ext == 'sln':
                     self.cat = ''
                     self.parent.cat = 'solution'
@@ -60,7 +60,7 @@ class HierarchyNode:
 
                 if new_node.cat != '':
                     if new_node.ext == 'd':
-                        if self.cat == 'csproj':
+                        if self.cat == 'project':
                             if new_node.cat == 'test_data':
                                 self.children.append(new_node)
                         else:
@@ -68,5 +68,15 @@ class HierarchyNode:
                     else:
                         self.children.append(new_node)
 
+        if self.cat == 'project':
+            HierarchyNode.project_nodes.append(self)
+
+    def get_csproj_node(self):
+        for node in self.children:
+            if node.cat == 'csproj':
+                return node
+        return None
+
     def __repr__(self):
         return '<{}({}:{}) :: {}>'.format(self.cat, self.name, self.ext, self.path)
+

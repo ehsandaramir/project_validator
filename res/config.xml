@@ -1,45 +1,44 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<solution name="A1" path="A1">
-
-    <project name="A1" path="A1">
-        <source path="Program.cs">
-            <namespace name="A1">
-                <class name="Program">
-                    <method name="Main"/>
-                    <method name="Add"/>
-                    <method name="Process"/>
-                </class>
-            </namespace>
-        </source>
-        <source path="MyClass.cs">
-            <namespace name="Program">
-                <class name="MClass">
-                    <method name="Program"/>
-                </class>
-            </namespace>
-        </source>
-    </project>
-
-    <project name="A1Tests" path="A1Tests">
-        <source path="ProgramTests.cs">
-            <namespace name="A1">
-                <class name="ProgramTests">
-                    <method name="AddTest"
-                            annotation-contains="TestMethod"/>
-                    <method name="GradedTest"
-                            annotation-contains="TestMethod;Timeout(100)"
-                            body-contains="RunLocalTests"/>
-                </class>
-            </namespace>
-        </source>
-        <source path="MyClass.cs">
-            <namespace name="Program">
-                <class name="MClass">
-                    <method name="Program"/>
-                </class>
-            </namespace>
-        </source>
-    </project>
-
-</solution>
+<repository path=".">
+    <solution name="A1" path="A1">
+        <project name="A1" path="A1">
+            <source path="Program.cs">
+                <namespace name="A1">
+                    <class name="Program">
+                        <method name="Main"/>
+                        <method name="Add"/>
+                        <method name="Process"/>
+                    </class>
+                </namespace>
+            </source>
+            <source path="MyClass.cs">
+                <namespace name="Program">
+                    <class name="MClass">
+                        <method name="Program"/>
+                    </class>
+                </namespace>
+            </source>
+        </project>
+        <project name="A1Tests" path="A1Tests">
+            <source path="ProgramTests.cs">
+                <namespace name="A1">
+                    <class name="ProgramTests">
+                        <method name="AddTest"
+                                annotation-contains="TestMethod"/>
+                        <method name="GradedTest"
+                                annotation-contains="TestMethod;Timeout(100)"
+                                body-contains="RunLocalTests"/>
+                    </class>
+                </namespace>
+            </source>
+            <source path="MyClass.cs">
+                <namespace name="Program">
+                    <class name="MClass">
+                        <method name="Program"/>
+                    </class>
+                </namespace>
+            </source>
+        </project>
+    </solution>
+</repository>

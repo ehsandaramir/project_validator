@@ -13,7 +13,7 @@ class HierarchyParser:
         self._root = root
         self._tree = HierarchyNode(None, root)
 
-        for csproj in self._tree.csproj_nodes:
+        for csproj in self._tree.project_nodes:
             csproj_content = []
             for source in csproj.children:
                 if source.cat == 'source':
@@ -22,10 +22,9 @@ class HierarchyParser:
             if len(csproj_content):
                 gp = GraphParser(csproj_content)
                 gp.parse()
-                csproj.children.append(gp.root)
+                csproj.get_csproj_node().children.append(gp.root)
             else:
                 raise ProjectEmpty(f'empty project in path {csproj.parent.path}')
-
 
     def lookup_by_name(self, name_regex: str) -> Union[HierarchyNode, None]:
         bfs_queue = [self._tree]
@@ -36,6 +35,19 @@ class HierarchyParser:
             if re.match(name_regex, current.name):
                 return current
         return None
+
+    def lookup_by_name_and_cat(self, name_regex: str, cat: str) -> Union[HierarchyNode, None]:
+        bfs_queue = [self._tree]
+        while len(bfs_queue):
+            current = bfs_queue.pop(0)
+            bfs_queue += current.children
+
+            if re.match(name_regex, current.name) and current.cat == cat:
+                return current
+        return None
+
+    def get_root(self):
+        return self._root
 
     @staticmethod
     def _get_source(source_path: str):
@@ -60,6 +72,4 @@ class HierarchyParser:
                 continue
 
             result.append(line)
-            print(line_no)
-        print('----------------------------')
         return result
