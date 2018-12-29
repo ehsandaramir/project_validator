@@ -6,16 +6,15 @@ import argparse
 import logging.config
 import zipfile
 
-from project_validator.bundled_validator import BundledValidator
-from project_validator.graph.hierarchy_parser import HierarchyParser
-from project_validator.report.report_xml import XmlReport
-from project_validator.graph.hierarchy_node import HierarchyNode
+from project_validator import bundled_validator
+from project_validator.report import report_xml
+# from graph.hierarchy_parser import HierarchyParser
+# from graph.hierarchy_node import HierarchyNode
 
 
 def make_input_path(path: str, input_student_id: str) -> tuple:
-    if input_student_id:
-        student = input_student_id
-    else:
+    student = input_student_id
+    if not input_student_id:
         tokens = path.split('/')
         for token in tokens:
             if re.match(r'^[0-9]{8}$', token):
@@ -68,8 +67,7 @@ def parse_arguments():
     return parsed_args
 
 
-if __name__ == '__main__':
-
+def main():
     working_dir = os.getcwd()
     args = parse_arguments()
 
@@ -107,9 +105,14 @@ if __name__ == '__main__':
         'report': report_file_name
     }
 
-    bundled = BundledValidator(info)
+    bundled = bundled_validator.BundledValidator(info)
 
     if not args.export_logs:
         os.remove(log_file_name)
 
-    print('results exported to directory {}... {} errors reported'.format(result_path, XmlReport.report_counter))
+    print('results exported to directory {}... {} errors reported'.format(
+        result_path, report_xml.XmlReport.report_counter))
+
+
+if __name__ == '__main__':
+    main()
